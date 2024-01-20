@@ -1,4 +1,5 @@
 import 'package:bloctest/cubit/counter_cubit.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,15 +27,34 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            BlocBuilder<CounterCubit, CounterState>(
-                /*bloc: CounterCubit(),*/ // provide the local bloc instance
-                builder: (context, state) {
-                  // return widget here based on BlocA's state
-                  return Text(
-                    BlocProvider.of<CounterCubit>(context).counter.toString(),
-                    style: Theme.of(context).textTheme.headlineMedium,
+            BlocListener<CounterCubit, CounterState>(
+              listener: (context, state) {
+                if (state is CounterIncrement) {
+                  showCupertinoDialog(
+                    context: (context),
+                    builder: (context) => CupertinoAlertDialog(
+                      title: const Text("Counter Incremented"),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: const Text("OK"),
+                        ),
+                      ],
+                    ),
                   );
-                }),
+                }
+              },
+              child: BlocBuilder<CounterCubit, CounterState>(
+                  builder: (context, state) {
+                // return widget here based on BlocA's state
+                return Text(
+                  BlocProvider.of<CounterCubit>(context).counter.toString(),
+                  style: Theme.of(context).textTheme.headlineMedium,
+                );
+              }),
+            ),
           ],
         ),
       ),
