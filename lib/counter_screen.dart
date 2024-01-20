@@ -1,6 +1,10 @@
+import 'package:bloctest/cubit/counter_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
+
   final String title;
 
   @override
@@ -8,14 +12,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,15 +26,22 @@ class _MyHomePageState extends State<MyHomePage> {
             const Text(
               'You have pushed the button this many times:',
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
+            BlocBuilder<CounterCubit, CounterState>(
+                /*bloc: CounterCubit(),*/ // provide the local bloc instance
+                builder: (context, state) {
+                  // return widget here based on BlocA's state
+                  return Text(
+                    BlocProvider.of<CounterCubit>(context).counter.toString(),
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  );
+                }),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
+        onPressed: () {
+          BlocProvider.of<CounterCubit>(context).incrementCounter();
+        },
         tooltip: 'Increment',
         child: const Icon(Icons.add),
       ),
