@@ -1,4 +1,5 @@
 import 'package:bloctest/cubit/counter_cubit.dart';
+import 'package:bloctest/cubit/decremental_counter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -15,17 +16,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: BlocProvider(
-        create: (_) => CounterCubit(),
-        child: const MyHomePage(
-          title: 'Flutter Cubit Demo',
+        title: 'Flutter Demo',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
         ),
-      ),
-     );
+        home: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (_) => CounterCubit(),
+            ),
+            BlocProvider(
+              create: (_) => DecrementalCounterCubit(),
+            ),
+          ],
+          child: const MyHomePage(
+            title: 'Flutter Cubit Demo',
+          ),
+        ));
   }
 }
