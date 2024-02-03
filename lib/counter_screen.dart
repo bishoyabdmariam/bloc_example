@@ -1,5 +1,4 @@
 import 'package:bloctest/cubit/counter_cubit.dart';
-import 'package:bloctest/cubit/decremental_counter_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,8 +13,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int counter = 0;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -33,9 +30,6 @@ class _MyHomePageState extends State<MyHomePage> {
             MultiBlocListener(
               listeners: [
                 BlocListener<CounterCubit, CounterState>(
-                  listenWhen: (preState, state) {
-                    return preState != state;
-                  },
                   listener: (context, state) {
                     if (state is CounterIncrement) {
                       showCupertinoDialog(
@@ -53,20 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         ),
                       );
                     }
-                  },
-
-                  child: BlocBuilder<CounterCubit, CounterState>(
-                    builder: (context, state) {
-                      return Text(
-                        counter.toString(),
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      );
-                    },
-                  ),
-                ),
-                BlocListener<DecrementalCounterCubit, DecrementalCounterState>(
-                  listener: (context, state) {
-                    if (state is DecrementalCounterLoading) {
+                    if (state is CounterDecrement) {
                       showCupertinoDialog(
                         context: (context),
                         builder: (context) => CupertinoAlertDialog(
@@ -83,35 +64,44 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     }
                   },
-                  child: BlocBuilder<DecrementalCounterCubit, DecrementalCounterState>(
+                  /*child: BlocBuilder<CounterCubit, CounterState>(
                     builder: (context, state) {
                       return Text(
                         counter.toString(),
                         style: Theme.of(context).textTheme.headlineMedium,
                       );
                     },
-                  ),
+                  ),*/
                 ),
               ],
+              child: BlocBuilder<CounterCubit, CounterState>(
+                builder: (context, state) {
+                  return Text(
+                    context.read<CounterCubit>().counter.toString(),
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  );
+                },
+              ),
             ),
           ],
         ),
       ),
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
             FloatingActionButton(
               onPressed: () {
-                BlocProvider.of<DecrementalCounterCubit>(context).decrement(counter);
+                BlocProvider.of<CounterCubit>(context).decrementCounter();
               },
+              tooltip: 'Decrement',
               child: const Icon(Icons.remove),
             ),
+            const Padding(padding: EdgeInsets.all(20)),
             FloatingActionButton(
               onPressed: () {
-                BlocProvider.of<CounterCubit>(context)
-                    .incrementCounter(counter);
+                BlocProvider.of<CounterCubit>(context).incrementCounter();
               },
               tooltip: 'Increment',
               child: const Icon(Icons.add),

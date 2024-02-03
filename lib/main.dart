@@ -1,5 +1,4 @@
 import 'package:bloctest/cubit/counter_cubit.dart';
-import 'package:bloctest/cubit/decremental_counter_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -25,9 +24,6 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(
               create: (_) => CounterCubit(),
-            ),
-            BlocProvider(
-              create: (_) => DecrementalCounterCubit(),
             ),
           ],
           child: const MyHomePage(
