@@ -95,6 +95,12 @@ class Actions extends StatelessWidget {
                     onPressed: () =>
                         context.read<TimerBloc>().add(const TimerReset()),
                   ),
+                FloatingActionButton(
+                  child: const Icon(Icons.square),
+                  onPressed: () =>
+                      context.read<TimerBloc>().add(const TimerEnd()),
+                ),
+
                 ],
               TimerRunPause() => [
                   FloatingActionButton(
@@ -111,6 +117,11 @@ class Actions extends StatelessWidget {
                     child: const Icon(Icons.replay),
                     onPressed: () =>
                         context.read<TimerBloc>().add(const TimerReset()),
+                  ),
+                  FloatingActionButton(
+                    child: const Icon(Icons.square),
+                    onPressed: () =>
+                        context.read<TimerBloc>().add(const TimerEnd()),
                   ),
                 ],
               TimerRunComplete() => [
